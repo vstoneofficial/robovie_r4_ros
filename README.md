@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./images/RobovieR4_01.jpg" width="400" />
+</p>
+
 ## 研究開発用ロボットプラットフォーム Robovie-R4 ROS対応SDK
 ヴイストン株式会社より発売されている開発研究用ロボットプラットフォーム「Robovie-R4」をROSで制御するためのSDKです。別途Linux搭載のPC及びロボット実機が必要になります。
 Robovie-R4については、製品ページをご覧ください。

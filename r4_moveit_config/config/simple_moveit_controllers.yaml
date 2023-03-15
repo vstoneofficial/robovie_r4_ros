@@ -1,0 +1,27 @@
+controller_list:
+  - name: left_arm_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - l_shoulder_pitch
+      - l_shoulder_roll
+      - l_elbow_yaw
+      - l_elbow_bend
+  - name: right_arm_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - r_shoulder_pitch
+      - r_shoulder_roll
+      - r_elbow_yaw
+      - r_elbow_bend
+  - name: head_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - neck_yaw
+      - neck_roll
+      - neck_pitch

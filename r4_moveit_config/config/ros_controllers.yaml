@@ -1,0 +1,179 @@
+# MoveIt-specific simulation settings
+moveit_sim_hw_interface:
+  joint_model_group: controllers_initial_group_
+  joint_model_group_pose: controllers_initial_pose_
+# Settings for ros_control control loop
+generic_hw_control_loop:
+  loop_hz: 50
+  cycle_time_error_threshold: 0.01
+# Settings for ros_control hardware interface
+hardware_interface:
+  joints:
+    - l_shoulder_pitch
+    - l_shoulder_roll
+    - l_elbow_yaw
+    - l_elbow_bend
+    - r_shoulder_pitch
+    - r_shoulder_roll
+    - r_elbow_yaw
+    - r_elbow_bend
+    - neck_yaw
+    - neck_roll
+    - neck_pitch
+  sim_control_mode: 1  # 0: position, 1: velocity
+# Publish all joint states
+# Creates the /joint_states topic necessary in ROS
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+left_arm_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - l_shoulder_pitch
+    - l_shoulder_roll
+    - l_elbow_yaw
+    - l_elbow_bend
+  # gains:
+  #   l_shoulder_pitch: { p: 5000, d: 0, i: 0, i_clamp: 0.1 }
+  #   l_shoulder_roll: { p: 5000, d: 0, i: 0, i_clamp: 0.1 }
+  #   l_elbow_yaw: { p: 5000, d: 0, i: 0, i_clamp: 0.1 }
+  #   l_elbow_bend: { p: 5000, d: 0, i: 0, i_clamp: 0.1 }
+
+  # constraints:
+  #   goal_time: 3.0
+  #   stopped_velocity_tolerance: 0
+  #   l_shoulder_pitch: {trajectory: 0.2, goal: 0.1}
+  #   l_shoulder_roll: {trajectory: 0.2, goal: 0.1}
+  #   l_elbow_yaw: {trajectory: 0.2, goal: 0.1}
+  #   l_elbow_bend: {trajectory: 0.2, goal: 0.1}
+  # state_publish_rate: 25
+
+
+right_arm_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - r_shoulder_pitch
+    - r_shoulder_roll
+    - r_elbow_yaw
+    - r_elbow_bend
+  # gains:
+  #   r_shoulder_pitch: { p: 5000, d: 0, i: 0, i_clamp: 0.1 }
+  #   r_shoulder_roll: { p: 5000, d: 0, i: 0, i_clamp: 0.1 }
+  #   r_elbow_yaw: { p: 5000, d: 0, i: 0, i_clamp: 0.1 }
+  #   r_elbow_bend: { p: 5000, d: 0, i: 0, i_clamp: 0.1 }
+
+  # constraints:
+  #   goal_time: 3.0
+  #   stopped_velocity_tolerance: 0
+  #   r_shoulder_pitch: {trajectory: 0.2, goal: 0.1}
+  #   r_shoulder_roll: {trajectory: 0.2, goal: 0.1}
+  #   r_elbow_yaw: {trajectory: 0.2, goal: 0.1}
+  #   r_elbow_bend: {trajectory: 0.2, goal: 0.1}
+
+  # state_publish_rate: 25
+
+head_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - neck_yaw
+    - neck_roll
+    - neck_pitch
+  # gains:
+  #   neck_yaw: { p: 1000, d: 0, i: 0, i_clamp: 0.1 }
+  #   neck_roll: { p: 1000, d: 0, i: 0, i_clamp: 0.1 }
+  #   neck_pitch: { p: 1000, d: 0, i: 0, i_clamp: 0.1 }
+
+  # constraints:
+  #   goal_time: 3.0
+  #   stopped_velocity_tolerance: 0
+  #   neck_yaw: {trajectory: 0.2, goal: 0.1}
+  #   neck_roll: {trajectory: 0.2, goal: 0.1}
+  #   neck_pitch: {trajectory: 0.2, goal: 0.1}
+
+  # state_publish_rate: 25
+
+
+# controller_list:
+#   - name: left_arm_controller
+#     action_ns: follow_joint_trajectory
+#     type: FollowJointTrajectory
+#     default: true
+#     joints:
+#       - l_shoulder_pitch
+#       - l_shoulder_roll
+#       - l_elbow_yaw
+#       - l_elbow_bend
+#   - name: right_arm_controller
+#     action_ns: follow_joint_trajectory
+#     type: FollowJointTrajectory
+#     default: true
+#     joints:
+#       - r_shoulder_pitch
+#       - r_shoulder_roll
+#       - r_elbow_yaw
+#       - r_elbow_bend
+#   - name: head_controller
+#     action_ns: follow_joint_trajectory
+#     type: FollowJointTrajectory
+#     default: true
+#     joints:
+#       - neck_yaw
+#       - neck_roll
+#       - neck_pitch
+
+# left_arm_controller:
+#   type: effort_controllers/JointTrajectoryController
+#   joints:
+#     - l_shoulder_pitch
+#     - l_shoulder_roll
+#     - l_elbow_yaw
+#     - l_elbow_bend
+#   gains:
+#     l_shoulder_pitch:
+#       p: 100
+#       d: 1
+#       i: 1
+#       i_clamp: 1
+#     l_shoulder_roll:
+#       p: 100
+#       d: 1
+#       i: 1
+#       i_clamp: 1
+#     l_elbow_yaw:
+#       p: 100
+#       d: 1
+#       i: 1
+#       i_clamp: 1
+#     l_elbow_bend:
+#       p: 100
+#       d: 1
+#       i: 1
+#       i_clamp: 1
+# right_arm_controller:
+#   type: effort_controllers/JointTrajectoryController
+#   joints:
+#     - r_shoulder_pitch
+#     - r_shoulder_roll
+#     - r_elbow_yaw
+#     - r_elbow_bend
+#   gains:
+#     r_shoulder_pitch:
+#       p: 100
+#       d: 1
+#       i: 1
+#       i_clamp: 1
+#     r_shoulder_roll:
+#       p: 100
+#       d: 1
+#       i: 1
+#       i_clamp: 1
+#     r_elbow_yaw:
+#       p: 100
+#       d: 1
+#       i: 1
+#       i_clamp: 1
+#     r_elbow_bend:
+#       p: 100
+#       d: 1
+#       i: 1
+#       i_clamp: 1

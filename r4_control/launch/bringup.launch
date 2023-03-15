@@ -1,0 +1,23 @@
+<!--
+R4をROSに接続launch fileです。
+
+起動コマンド： roslaunch r4_control rosserial.launch
+
+-->
+
+<launch>
+  <arg name="r4port" default="/dev/ttyUSB0"/>  <!-- R4 VS-WRC058のデバイスファイルパスを設定してください -->
+  <arg name="r4baud" default="921600"/>
+  <arg name="mega3port" default="/dev/ttyUSB1"/>  <!-- megarover VS-WRC058のデバイスファイルパスを設定してください -->
+  <arg name="mega3baud" default="115200"/>
+
+  <node pkg="rosserial_python" type="serial_node.py" name="r4" output="screen">
+    <param name="port" value="$(arg r4port)"/>
+    <param name="baud" value="$(arg r4baud)"/>
+  </node>
+
+  <node pkg="rosserial_python" type="serial_node.py" name="mega3" output="screen">
+    <param name="port" value="$(arg mega3port)"/>
+    <param name="baud" value="$(arg mega3baud)"/>
+  </node>
+</launch>

@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: r4_description
+    relative_path: urdf/robovie_r4.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/robovie_r4_rover.srdf
+  CONFIG:
+    author_name: Vstone
+    author_email: infodesk@vstone.co.jp
+    generated_timestamp: 1666318426

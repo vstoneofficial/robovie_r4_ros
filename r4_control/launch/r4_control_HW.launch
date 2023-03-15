@@ -1,0 +1,63 @@
+<!--
+Robovie-R4をROS Controlで制御するサンプルのlaunch fileです。
+実機を動かす場合は、先にROSとの接続をしてください。
+
+RViz上(MoveItのインターフェイス)でRobovie-R4の目標ポーズを指定し、
+モーションプラニングが行われて、その軌道を実行可能です。
+
+起動コマンド： roslaunch r4_control r4_control_HW.launch
+
+-->
+
+<launch>
+    <!-- RViz関連 -->
+       <!--パラメータサーバにURDFをロード -->
+       <param name="robot_description" command="$(find xacro)/xacro '$(find r4_description)/urdf/robovie_r4.xacro'" />
+   
+       <!-- Rvizに表示  -->
+       <node name="rviz" pkg="rviz" type="rviz" args="-d $(find r4_control)/basic.rviz"/>
+   
+   <!-- コントローラ関連 -->
+        <!-- hardware interfaceをロード -->
+        <node name="r4_hw_main" pkg="r4_control" type="r4_hw_main" output="screen"/> 
+
+       <!-- コントローラの設定をロード  -->
+       <rosparam file="$(find r4_control)/config/r4_controllers.yaml" command="load"/>
+   
+       <!-- controller managerをロード  -->
+       <node name="ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false"
+           output="screen"
+           args="spawn joint_state_controller l_arm_position_trajectory_controller r_arm_position_trajectory_controller head_position_trajectory_controller" />
+   
+       <!-- joint_statesを/tfに変換 -->
+       <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+   
+       <!-- 疑似的なシミュレータ（モーション確認用）
+       （実機を動かす時、これをコメントアウトしてください） -->
+       <!-- <node name="r4_sim_echo" pkg="r4_control" type="r4_sim_echo"/> -->
+   
+    <!-- MoveIt関連 -->
+       <!-- パラメータサーバに必要なファイル（URDF, SRDF, .yaml configurationsなど）をロード -->
+       <include file="$(find r4_moveit_config)/launch/planning_context.launch">
+       <arg name="load_robot_description" value="true"/>
+       </include>
+   
+       <!-- follow_joint_trajectoryをremapする -->
+       <!-- <remap from="/joint_trajectory_action" to="/l_arm_position_trajectory_controller/follow_joint_trajectory"/> -->
+       <remap from="/left_arm_controller/follow_joint_trajectory" to="/l_arm_position_trajectory_controller/follow_joint_trajectory"/>
+       <remap from="/right_arm_controller/follow_joint_trajectory" to="/r_arm_position_trajectory_controller/follow_joint_trajectory"/>
+       <remap from="/head_controller/follow_joint_trajectory" to="/head_position_trajectory_controller/follow_joint_trajectory"/>
+   
+       <!-- MoveItを実行のため -->
+       <include file="$(find r4_moveit_config)/launch/move_group.launch">
+       <arg name="allow_trajectory_execution" value="true"/>
+       <arg name="info" value="true"/>
+       </include>
+       
+       <!-- 初期位置のズレのエラー防止用 -->
+       <param name="move_group/trajectory_execution/allowed_start_tolerance" value="0.0" />
+       <param name="move_group/trajectory_execution/allowed_execution_duration_scaling" value="3.0" />
+
+       <!-- 台車odom -->
+       <node name="pub_odom" pkg="megarover3_ros" type="pub_odom"/>
+   </launch>

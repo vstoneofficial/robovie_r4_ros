@@ -1,0 +1,26 @@
+controller_list:
+  - name: fake_left_arm_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - l_shoulder_pitch
+      - l_shoulder_roll
+      - l_elbow_yaw
+      - l_elbow_bend
+  - name: fake_right_arm_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - r_shoulder_pitch
+      - r_shoulder_roll
+      - r_elbow_yaw
+      - r_elbow_bend
+  - name: fake_head_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - neck_yaw
+      - neck_roll
+      - neck_pitch
+# initial:  # Define initial robot poses per group
+#  - group: left_arm
+#    pose: home
+
+  # []

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>r4_description</name>
+  <version>1.0.0</version>
+  <description>3D model of Robovie-R4 for simulation and visualization</description>
+
+  <maintainer email="infodesk@vstone.co.jp">Vstone</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <depend>urdf</depend>
+  <depend>xacro</depend>
+</package>

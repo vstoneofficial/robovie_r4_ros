@@ -1,0 +1,51 @@
+generic_hw_control_loop:
+  loop_hz: 60 # 250 to emulate serial pause COMMAND_PERIOD 0.0055 , SERIAL_PAUSE 0.004
+  cycle_time_error_threshold: 0.1
+
+# Settings for ros_control hardware interface (used in generic_hw_interface.cpp)
+hardware_interface:
+  joints:
+    - l_shoulder_pitch
+    - l_shoulder_roll
+    - l_elbow_yaw
+    - l_elbow_bend
+    - r_shoulder_pitch
+    - r_shoulder_roll
+    - r_elbow_yaw
+    - r_elbow_bend
+    - neck_yaw
+    - neck_roll
+    - neck_pitch
+  sim_control_mode: 0 # 0: position, 1: velocity
+
+# Publish all joint states ----------------------------------
+# Creates the /joint_states topic necessary in ROS
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+
+# Joint Trajectory Controller -------------------------------
+# For detailed explanations of parameter see http://wiki.ros.org/joint_trajectory_controller
+l_arm_position_trajectory_controller:
+  type: position_controllers/JointTrajectoryController
+  # These joints can likely just be copied from the hardware_interface list above
+  joints:
+    - l_shoulder_pitch
+    - l_shoulder_roll
+    - l_elbow_yaw
+    - l_elbow_bend
+
+r_arm_position_trajectory_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - r_shoulder_pitch
+    - r_shoulder_roll
+    - r_elbow_yaw
+    - r_elbow_bend
+
+head_position_trajectory_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - neck_yaw
+    - neck_roll
+    - neck_pitch

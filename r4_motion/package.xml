@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>r4_motion</name>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <description>The r4_motion package</description>
 
   <maintainer email="infodesk@vstone.co.jp">Vstone</maintainer>

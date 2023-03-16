@@ -22,8 +22,6 @@ Robovie-R4については、[製品ページ](https://www.vstone.co.jp/products/
       - [Subscribe](#subscribe)
       - [Publish](#publish)
   - [MoveIt＋RVizで動かす](#moveitrvizで動かす)
-- [変更履歴](#変更履歴)
-    - [v1.0.0 (2023-03-15)](#v100-2023-03-15)
 
 # インストール方法
 
@@ -138,7 +136,3 @@ Robovie-R4 の subscribe（購読）するメッセージ、publish（配信）�
 ## MoveIt＋RVizで動かす
 上記の [r4\_control](#r4_control) のコマンドを実行してから、GUI上の操作が可能です。
 MoveItの使い方の詳細は[公式のドキュメント](https://ros-planning.github.io/moveit_tutorials/index.html)を参照してください。
-
-# 変更履歴
-### v1.0.0 (2023-03-15)
-- 初版

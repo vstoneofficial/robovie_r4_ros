@@ -8,10 +8,6 @@ namespace r4_control_ns
         : ros_control_boilerplate::GenericHWInterface(nh, urdf_model)
     {
         sensor_sub = nh.subscribe("/r4/r4Sensor", 1, &R4HWInterface::sensorCallback, this);
-        goal_pos_sub_l_arm = nh.subscribe("/l_arm_position_trajectory_controller/follow_joint_trajectory/goal", 1, &R4HWInterface::lArmGoalCallback, this);
-        goal_pos_sub_r_arm = nh.subscribe("/r_arm_position_trajectory_controller/follow_joint_trajectory/goal", 1, &R4HWInterface::rArmGoalCallback, this);
-        goal_pos_sub_head = nh.subscribe("/head_position_trajectory_controller/follow_joint_trajectory/goal", 1, &R4HWInterface::headGoalCallback, this);
-
         cmd_pub = nh.advertise<r4_control::r4Cmd>("/r4/r4Cmd", 3);
         ROS_INFO("R4HWInterface declared.");
     }
@@ -19,24 +15,12 @@ namespace r4_control_ns
     void R4HWInterface::lArmGoalCallback(const control_msgs::FollowJointTrajectoryActionGoal::ConstPtr &msg)
     {
         int waypoints = msg->goal.trajectory.points.size();
-
-        final_angle[0] = msg->goal.trajectory.points[waypoints - 1].positions[2];  // shoulder_pitch
-        final_angle[1] = msg->goal.trajectory.points[waypoints - 1].positions[3];  // shoulder_roll
-        final_angle[2] = msg->goal.trajectory.points[waypoints - 1].positions[1];  // elbow_yaw
-        final_angle[3] = msg->goal.trajectory.points[waypoints - 1].positions[0];  // elbow_bend
-
         duration = msg->goal.trajectory.points[waypoints - 1].time_from_start.toSec();
     }
 
     void R4HWInterface::rArmGoalCallback(const control_msgs::FollowJointTrajectoryActionGoal::ConstPtr &msg)
     {
         int waypoints = msg->goal.trajectory.points.size();
-
-        final_angle[4] = msg->goal.trajectory.points[waypoints - 1].positions[2];  // shoulder_pitch
-        final_angle[5] = msg->goal.trajectory.points[waypoints - 1].positions[3];  // shoulder_roll
-        final_angle[6] = msg->goal.trajectory.points[waypoints - 1].positions[1];  // elbow_yaw
-        final_angle[7] = msg->goal.trajectory.points[waypoints - 1].positions[0];  // elbow_bend
-
         duration = msg->goal.trajectory.points[waypoints - 1].time_from_start.toSec();
     }
 
@@ -45,11 +29,6 @@ namespace r4_control_ns
     void R4HWInterface::headGoalCallback(const control_msgs::FollowJointTrajectoryActionGoal::ConstPtr &msg)
     {
         int waypoints = msg->goal.trajectory.points.size();
-
-        final_angle[8] = msg->goal.trajectory.points[waypoints - 1].positions[2];  //neck_yaw
-        final_angle[9] = msg->goal.trajectory.points[waypoints - 1].positions[1];  //neck_roll
-        final_angle[10] = msg->goal.trajectory.points[waypoints - 1].positions[0];  //neck_pitch
-
         duration = msg->goal.trajectory.points[waypoints - 1].time_from_start.toSec();
     }
 
@@ -81,21 +60,24 @@ namespace r4_control_ns
     void R4HWInterface::write(ros::Duration &elapsed_time)
     {
         static r4_control::r4Cmd joint_cmd;
+        const double SAMPLE_RATE = 100.0; // ポーズ間の時間係数　higher value makes robot move faster
 
         bool change_detected = false;
         for (int i = 0; i < num_joints_; i++) {
             if (joint_position_prev_[i] != joint_position_command_[i]) {
                 change_detected = true;
-                i = (int)num_joints_;
+                i = static_cast<int>(num_joints_);
             }
         }
-
+        int time_check;
         if (change_detected) {
             for (int i = 0; i < num_joints_; i++) {
-                joint_cmd.angle[i] = (int16_t)(final_angle[i] * RAD_TO_DEG * 10);
+                joint_cmd.angle[i] = static_cast<int16_t>(joint_position_command_[i] * RAD_TO_DEG * 10);
                 joint_position_prev_[i] = joint_position_command_[i];
             }
-            joint_cmd.time = (int16_t)(duration * 1000 / 16.667);
+
+            time_check = static_cast<int16_t>((duration * 1000.0) / 16.66666667 / SAMPLE_RATE);
+            joint_cmd.time =  (time_check == 0) ? 1 : time_check;
             cmd_pub.publish(joint_cmd);
         }
     }
@@ -104,6 +86,7 @@ namespace r4_control_ns
     {
         // Enforces position and velocity
         // pos_jnt_sat_interface_.enforceLimits(period);
+        // vel_jnt_sat_interface_.enforceLimits(period);
     }
 
 } // namespace r4_control_ns

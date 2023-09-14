@@ -37,9 +37,6 @@ public:
 
 protected:
   ros::Subscriber sensor_sub;
-  ros::Subscriber goal_pos_sub_l_arm;
-  ros::Subscriber goal_pos_sub_r_arm;
-  ros::Subscriber goal_pos_sub_head;
   void sensorCallback(const r4_control::r4Sensor::ConstPtr& msg);
   void lArmGoalCallback(const control_msgs::FollowJointTrajectoryActionGoal::ConstPtr& goal);
   void rArmGoalCallback(const control_msgs::FollowJointTrajectoryActionGoal::ConstPtr& goal);

@@ -21,10 +21,10 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(move_group_joint_value
+add_executable(r4_move_group_joint_value
   src/move_group_joint_value.cpp
 )
-add_dependencies(move_group_joint_value ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(move_group_joint_value
+add_dependencies(r4_move_group_joint_value ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(r4_move_group_joint_value
   ${catkin_LIBRARIES}
 )

@@ -5,17 +5,18 @@ Robovie-R4をROS Controlで制御するサンプルのlaunch fileです。
 RViz上(MoveItのインターフェイス)でRobovie-R4の目標ポーズを指定し、
 モーションプラニングが行われて、その軌道を実行可能です。
 
-起動コマンド： roslaunch r4_control r4_control_HW.launch
+起動コマンド： roslaunch r4_control r4_control_HW.launch with_rover:=true
 
 -->
 
 <launch>
+    <!-- launch with rover?  -->
+    <arg name="with_rover" default="true" />
+
     <!-- RViz関連 -->
-       <!--パラメータサーバにURDFをロード -->
-       <param name="robot_description" command="$(find xacro)/xacro '$(find r4_description)/urdf/robovie_r4.xacro'" />
-   
        <!-- Rvizに表示  -->
-       <node name="rviz" pkg="rviz" type="rviz" args="-d $(find r4_control)/basic.rviz"/>
+       <node name="rviz" pkg="rviz" type="rviz" args="-d $(find r4_control)/rviz/with-rover.rviz" if="$(arg with_rover)"/>
+       <node name="rviz" pkg="rviz" type="rviz" args="-d $(find r4_control)/rviz/no-rover.rviz" unless="$(arg with_rover)"/>
    
    <!-- コントローラ関連 -->
         <!-- hardware interfaceをロード -->
@@ -40,6 +41,7 @@ RViz上(MoveItのインターフェイス)でRobovie-R4の目標ポーズを指�
        <!-- パラメータサーバに必要なファイル（URDF, SRDF, .yaml configurationsなど）をロード -->
        <include file="$(find r4_moveit_config)/launch/planning_context.launch">
        <arg name="load_robot_description" value="true"/>
+       <arg name="with_rover" value="$(arg with_rover)"/>
        </include>
    
        <!-- follow_joint_trajectoryをremapする -->
@@ -51,6 +53,7 @@ RViz上(MoveItのインターフェイス)でRobovie-R4の目標ポーズを指�
        <!-- MoveItを実行のため -->
        <include file="$(find r4_moveit_config)/launch/move_group.launch">
        <arg name="allow_trajectory_execution" value="true"/>
+       <arg name="with_rover" value="$(arg with_rover)"/>
        <arg name="info" value="true"/>
        </include>
        
@@ -59,5 +62,5 @@ RViz上(MoveItのインターフェイス)でRobovie-R4の目標ポーズを指�
        <param name="move_group/trajectory_execution/allowed_execution_duration_scaling" value="3.0" />
 
        <!-- 台車odom -->
-       <node name="pub_odom" pkg="megarover3_ros" type="pub_odom"/>
+       <node name="pub_odom" pkg="megarover3_ros" type="pub_odom" if="$(arg with_rover)" />
    </launch>

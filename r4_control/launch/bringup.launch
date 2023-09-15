@@ -6,6 +6,7 @@ R4をROSに接続launch fileです。
 -->
 
 <launch>
+  <arg name="with_rover" default="true"/> <!-- launch with rover? -->
   <arg name="r4port" default="/dev/ttyUSB0"/>  <!-- R4 VS-WRC058のデバイスファイルパスを設定してください -->
   <arg name="r4baud" default="921600"/>
   <arg name="mega3port" default="/dev/ttyUSB1"/>  <!-- megarover VS-WRC058のデバイスファイルパスを設定してください -->
@@ -16,7 +17,7 @@ R4をROSに接続launch fileです。
     <param name="baud" value="$(arg r4baud)"/>
   </node>
 
-  <node pkg="rosserial_python" type="serial_node.py" name="mega3" output="screen">
+  <node pkg="rosserial_python" type="serial_node.py" name="mega3" output="screen" if="$(arg with_rover)">
     <param name="port" value="$(arg mega3port)"/>
     <param name="baud" value="$(arg mega3baud)"/>
   </node>

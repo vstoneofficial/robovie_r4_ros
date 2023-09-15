@@ -1,4 +1,4 @@
-## 研究開発用ロボットプラットフォーム Robovie-R4 ROSパッケージ
+# 研究開発用ロボットプラットフォーム Robovie-R4 ROSパッケージ
 
 <p align="center">
   <img src="./images/RobovieR4_01.jpg" width="600" />
@@ -8,22 +8,22 @@
 
 Robovie-R4については、[製品ページ](https://www.vstone.co.jp/products/robovie_r4/index.html)をご覧ください。
 
-## 目次
+# 目次
 - [インストール方法](#インストール方法)
 - [各パッケージの説明と利用方法](#各パッケージの説明と利用方法)
-    - [r4\_control](#r4_control)
-    - [r4\_description](#r4_description)
-    - [r4\_motion](#r4_motion)
-    - [r4\_moveit\_config](#r4_moveit_config)
-      - [MoveIt](#moveit)
-      - [Gazeboシミュレータ](#gazeboシミュレータ)
+  - [r4\_control](#r4_control)
+  - [r4\_description](#r4_description)
+  - [r4\_motion](#r4_motion)
+  - [r4\_moveit\_config](#r4_moveit_config)
+    - [MoveIt](#moveit)
+    - [Gazeboシミュレータ](#gazeboシミュレータ)
 - [Robovie-R4の制御方法](#robovie-r4の制御方法)
   - [ROS（ROS1）メッセージ通信](#rosros1メッセージ通信)
-      - [Subscribe](#subscribe)
-      - [Publish](#publish)
+    - [Subscribe](#subscribe)
+    - [Publish](#publish)
   - [MoveIt＋RVizで動かす](#moveitrvizで動かす)
 
-# インストール方法
+## インストール方法
 
 - ROSのインストール方法は[こちら](http://wiki.ros.org/noetic/Installation/Ubuntu)を確認してください。
 - catkin ワークスペースを作成
@@ -57,17 +57,18 @@ Robovie-R4については、[製品ページ](https://www.vstone.co.jp/products/
 
 以上で`robovie_r4_ros`パッケージのセットアップは完了です。
 
-# 各パッケージの説明と利用方法
+## 各パッケージの説明と利用方法
 ### r4_control
 Robovie-R4をROS Controlで制御するパッケージ。\
 以下のコマンドでRobovie-R4をROSと接続。
+台車を使わない場合は、`with_rover`引数をfalseに設定してください。デフォルトではtrueに設定しています。
 ```
-roslaunch r4_control bringup.launch
+roslaunch r4_control bringup.launch with_rover:=true
 ```
 
 以下のコマンドでRobovie-R4をros_controlで制御する
 ```
-roslaunch r4_control r4_control_HW.launch
+roslaunch r4_control r4_control_HW.launch with_rover:=true
 ```
 
 実機を操作する前に、[RViz](http://wiki.ros.org/rviz)上で動作確認のためにこちらのノードを起動してください。
@@ -113,8 +114,8 @@ roslaunch r4_moveit_config demo_gazebo.launch
 > **Note**
 > パラメータチューニングが必要な場合はあります。
 
-# Robovie-R4の制御方法
-## ROS（ROS1）メッセージ通信
+## Robovie-R4の制御方法
+### ROS（ROS1）メッセージ通信
 Robovie-R4 の subscribe（購読）するメッセージ、publish（配信）するメッセージの仕様は以下のようになります。
 #### Subscribe
 - `/r4/r4Cmd`
@@ -133,6 +134,6 @@ Robovie-R4 の subscribe（購読）するメッセージ、publish（配信）�
       ```
       
 
-## MoveIt＋RVizで動かす
+### MoveIt＋RVizで動かす
 上記の [r4\_control](#r4_control) のコマンドを実行してから、GUI上の操作が可能です。
 MoveItの使い方の詳細は[公式のドキュメント](https://ros-planning.github.io/moveit_tutorials/index.html)を参照してください。
